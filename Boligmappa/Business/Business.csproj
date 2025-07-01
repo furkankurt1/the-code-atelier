@@ -7,8 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Handlers\Login\Commands\" />
-      <Folder Include="Handlers\Login\Queries\" />
+      <Folder Include="Handlers\User\Queries\" />
+        <PackageReference Include="MediatR" Version="12.1.1" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     </ItemGroup>
 
 </Project>
