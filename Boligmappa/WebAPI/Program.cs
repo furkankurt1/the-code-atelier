@@ -14,6 +14,8 @@ var configuration = builder.Configuration;
 //DIs
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<ITokenHelper, TokenHelper>();
 
 
 builder.Services.AddControllers();

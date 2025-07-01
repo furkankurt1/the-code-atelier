@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Core.Abstract;
+﻿using Core.Abstract;
 using Core.Utilities;
 using Core.Utilities.ResultWrapper;
 using DataAccess.Abstract;

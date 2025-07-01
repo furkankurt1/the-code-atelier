@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using IResult = Core.Utilities.ResultWrapper.IResult;
+using IDataResult = Core.Utilities.ResultWrapper.IDataResult<string>;
 
 namespace WebAPI.Controllers
 {
@@ -27,6 +28,17 @@ namespace WebAPI.Controllers
                 return Ok(result);
 
             return BadRequest(result);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
+        {
+            IDataResult result = await _mediator.Send(command);
+
+            if (result.Success)
+                return Ok(result);
+
+            return Unauthorized(result);
         }
     }
 }
