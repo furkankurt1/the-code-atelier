@@ -3,6 +3,7 @@ using Core.Utilities;
 using Core.Utilities.ResultWrapper;
 using DataAccess.Abstract;
 using MediatR;
+using SystemTask = System.Threading.Tasks.Task;
 
 namespace Business.Handlers.User.Commands;
 
@@ -23,14 +24,6 @@ public class CreateUserCommand : IRequest<IResult>
             _passwordService = passwordService;
         }
 
-        
-        
-        /// <summary>
-        /// NOTE FROM ATLAS: USING AOP IN HERE IS VITAL FOR HANDLING CROSS CUTTING CONCERNS MANAGEMENT. BUT SINCE IT WOULD TAKE MORE TIME THAN GIVEN I PASS HERE.
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
         public async Task<IResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var result = await BusinessRules.RunAsync(
@@ -59,12 +52,10 @@ public class CreateUserCommand : IRequest<IResult>
             return new SuccessResult("User created successfully.");
         }
 
-        #region Validation Rules (Async)
-
         private Task<IResult> CheckIfRoleIsValidAsync(string role)
         {
             string[] allowedRoles = { "Admin", "User" };
-            return Task.FromResult<IResult>(
+            return SystemTask.FromResult<IResult>(
                 allowedRoles.Contains(role)
                     ? new SuccessResult()
                     : new ErrorResult("Role must be either 'Admin' or 'User'."));
@@ -72,7 +63,7 @@ public class CreateUserCommand : IRequest<IResult>
 
         private Task<IResult> CheckIfEmailIsProvidedAsync(string email)
         {
-            return Task.FromResult<IResult>(
+            return SystemTask.FromResult<IResult>(
                 string.IsNullOrWhiteSpace(email)
                     ? new ErrorResult("Email is required.")
                     : new SuccessResult());
@@ -80,15 +71,11 @@ public class CreateUserCommand : IRequest<IResult>
 
         private Task<IResult> CheckIfPasswordIsProvidedAsync(string password)
         {
-            return Task.FromResult<IResult>(
+            return SystemTask.FromResult<IResult>(
                 string.IsNullOrWhiteSpace(password)
                     ? new ErrorResult("Password is required.")
                     : new SuccessResult());
         }
-
-        #endregion
-
-        #region Business Rules (Async)
 
         private async Task<IResult> CheckIfEmailAlreadyExistsAsync(string email)
         {
@@ -97,7 +84,5 @@ public class CreateUserCommand : IRequest<IResult>
                 ? new SuccessResult()
                 : new ErrorResult("A user with this email already exists.");
         }
-
-        #endregion
     }
 }

@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Handlers\Task\Queries\" />
       <Folder Include="Handlers\User\Queries\" />
         <PackageReference Include="MediatR" Version="12.1.1" />
 
