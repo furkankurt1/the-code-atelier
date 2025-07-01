@@ -1,4 +1,4 @@
-using Business.Handlers.Login.Commands;
+using Business.Handlers;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(Marker).Assembly));
+    cfg.RegisterServicesFromAssembly(typeof(BusinessAssemblyReference).Assembly));
 
 var app = builder.Build();
 
