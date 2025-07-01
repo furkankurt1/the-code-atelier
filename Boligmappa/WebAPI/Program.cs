@@ -1,4 +1,6 @@
 using Business.Handlers;
+using Core.Abstract;
+using Core.Concrete;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -11,6 +13,7 @@ var configuration = builder.Configuration;
 
 //DIs
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 
 builder.Services.AddControllers();
