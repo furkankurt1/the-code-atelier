@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Core.DataAccess.EntityFramework
 {
-    public class EfEntityRepositoryBase<TEntity, TContext> : IRepository<TEntity>
+    public class EfEntityRepositoryBase<TEntity, TContext> : IEntityRepository<TEntity>
         where TEntity : class, IEntity
         where TContext : DbContext
     {
@@ -19,6 +19,11 @@ namespace Core.DataAccess.EntityFramework
         public async Task<TEntity?> GetByIdAsync(int id)
         {
             return await Context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await Context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()

@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Abstract;
 
-public interface IUserRepository : IRepository<User>
+public interface IUserRepository : IEntityRepository<User>
 {
     Task<User?> GetByEmailAsync(string email);
 }
