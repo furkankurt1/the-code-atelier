@@ -49,5 +49,19 @@ namespace WebAPI.Controllers
             var result = await _mediator.Send(query);
             return result.Success ? Ok(result) : BadRequest(result);
         }
+        
+        [HttpPost("update")]
+        public async Task<IActionResult> Update([FromBody] UpdateProjectCommand command)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized("User ID not found in token.");
+
+            command.SetUserId(int.Parse(userIdClaim.Value));
+
+            var result = await _mediator.Send(command);
+            return result.Success ? Ok(result) : BadRequest(result);
+        }
+
     }
 }
