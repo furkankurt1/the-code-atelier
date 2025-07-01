@@ -26,6 +26,14 @@ public class CreateUserCommand : IRequest<IResult>
             _passwordService = passwordService;
         }
 
+        
+        
+        /// <summary>
+        /// NOTE FROM ATLAS: USING AOP IN HERE IS VITAL FOR HANDLING CROSS CUTTING CONCERNS MANAGEMENT. BUT SINCE IT WOULD TAKE MORE TIME THAN GIVEN I PASS HERE.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<IResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var result = await BusinessRules.RunAsync(
