@@ -1,0 +1,65 @@
+## .NET Core / .NET 5/6/7/8/9
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.DotSettings.user
+
+# VS Code
+.vscode/
+
+# Paket yöneticisi çıktıları
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Logs
+*.log
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Ef Core Migrations Snapshots
+Migrations/*Snapshot.cs
+
+# Test sonuçları
+TestResults/
+
+# User secrets (dotnet user-secrets)
+secrets.json
+
+# Global tools
+.tools/
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Rider cache
+.idea/
+.idea/*
+
+# Rider's dependency cache
+.idea/.idea.*
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+*.cache
+*.vspscc
+*.vssscc
+
+# Build results
+*.dll
+*.exe
+
+# JetBrains Rider build system
+*.iml
