@@ -1,4 +1,8 @@
-﻿using Core.Abstract;
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Core.Abstract;
+using Core.Utilities;
 using Core.Utilities.ResultWrapper;
 using DataAccess.Abstract;
 using MediatR;
@@ -24,11 +28,15 @@ public class CreateUserCommand : IRequest<IResult>
 
         public async Task<IResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(request.Email);
-            if (existingUser != null)
-            {
-                return new ErrorResult("A user with this email already exists.");
-            }
+            var result = await BusinessRules.RunAsync(
+                CheckIfRoleIsValidAsync(request.Role),
+                CheckIfEmailIsProvidedAsync(request.Email),
+                CheckIfPasswordIsProvidedAsync(request.Password),
+                CheckIfEmailAlreadyExistsAsync(request.Email)
+            );
+
+            if (result != null)
+                return result;
 
             _passwordService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -45,5 +53,46 @@ public class CreateUserCommand : IRequest<IResult>
 
             return new SuccessResult("User created successfully.");
         }
+
+        #region Validation Rules (Async)
+
+        private Task<IResult> CheckIfRoleIsValidAsync(string role)
+        {
+            string[] allowedRoles = { "Admin", "User" };
+            return Task.FromResult<IResult>(
+                allowedRoles.Contains(role)
+                    ? new SuccessResult()
+                    : new ErrorResult("Role must be either 'Admin' or 'User'."));
+        }
+
+        private Task<IResult> CheckIfEmailIsProvidedAsync(string email)
+        {
+            return Task.FromResult<IResult>(
+                string.IsNullOrWhiteSpace(email)
+                    ? new ErrorResult("Email is required.")
+                    : new SuccessResult());
+        }
+
+        private Task<IResult> CheckIfPasswordIsProvidedAsync(string password)
+        {
+            return Task.FromResult<IResult>(
+                string.IsNullOrWhiteSpace(password)
+                    ? new ErrorResult("Password is required.")
+                    : new SuccessResult());
+        }
+
+        #endregion
+
+        #region Business Rules (Async)
+
+        private async Task<IResult> CheckIfEmailAlreadyExistsAsync(string email)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+            return user == null
+                ? new SuccessResult()
+                : new ErrorResult("A user with this email already exists.");
+        }
+
+        #endregion
     }
 }
